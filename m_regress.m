@@ -1,7 +1,8 @@
 % this should eventually be a template for complete regression automation; this is the mortality regression
+function m_regress(phasename,degree)
 
 % stage = 'pupae'
-phasename = "pupae"
+%phasename = "pupae"
 temp=csvread(strcat("data/m",phasename,".csv"));
 temp(1,:)=[]; # delete top row - headers
 %todelete=~any(temp(:,2),2);
@@ -13,7 +14,7 @@ stage=stage/100; % since all of the values in the CSV are of percent units, need
 stage=1-stage; % we're loading the SURVIVAL RATE, NOT THE MORTALITY RATE!
 
 x=15:35; % might need to be changed; might not even be necessary
-p=polyfit(temp,stage,2); % usually going to be quadratic; might need to be changed for some cases, but not sure
+p=polyfit(temp,stage,degree); % usually going to be quadratic; might need to be changed for some cases, but not sure
 
 % plot
 scatter(temp,stage);
@@ -30,3 +31,5 @@ save("-mat",strcat("fitm_",phasename,".mat"),"p");
 % save plot to both SVG and PNG
 print(strcat("plots/fitm_",phasename,".svg"),"-dsvg")
 print(strcat("plots/fitm_",phasename,".png"),"-dpng")
+
+end
