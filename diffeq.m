@@ -6,8 +6,8 @@ r, m, b
 %tempeq=
 
 function popf=f(pop,t)
-%temp=17.8995;
-temp=18;
+temp=17.8995;
+%temp=18;
 %temp=18;
 vars % set the default variables
 %{
@@ -25,14 +25,14 @@ popf(4)=r(3)*pop(3)-(m(4))*pop(4);
 end
 
 t_start=0;
-t_end=800;
-t_count=t_end*2+1;
-t_step=(t_end-t_start)/t_count; % some math is almost certainly wrong here; probably off by 1 or something
-t = linspace(t_start,t_end,t_count)';
+t_end=200;
+t_step=1/2;
+t=linspace(t_start,t_end,(t_end-t_start)/t_step+1)';
+
 pop=zeros(size(t,1),4);
 pop(1,:)=[E;L;P;Ah];
 for n=1:size(t,1)-1
-	tmp=lsode("f", pop(n,:), [0,t_step]);
+	tmp=lsode("f", pop(n,:), [0,t(n+1)-t(n)]);
 	pop(n+1,:)=tmp(2,:);
 end
 
