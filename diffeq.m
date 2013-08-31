@@ -27,13 +27,13 @@ end
 t_start=0;
 t_end=800;
 t_count=t_end*2+1;
-t_step=(t_end-t_start)/t_count; % some math is wrong here; probably off by 1 or something
+t_step=(t_end-t_start)/t_count; % some math is almost certainly wrong here; probably off by 1 or something
 t = linspace(t_start,t_end,t_count)';
 pop=zeros(size(t,1),4);
 pop(1,:)=[E;L;P;Ah];
 for n=1:size(t,1)-1
-	tmp=lsode("f", pop(n,:), t_step);
-	pop(n+1,:)=tmp;
+	tmp=lsode("f", pop(n,:), [0,t_step]);
+	pop(n+1,:)=tmp(2,:);
 end
 
 %pop = lsode("f", [E;L;P;Ah], (t=linspace(0,800,1600)'));
