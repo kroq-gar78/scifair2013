@@ -1,6 +1,6 @@
 #!/bin/bash
 
-degree=2
+degree=${1:-2}
 echo "degree=$degree"
 
 # automagically do all of the regressions (at least for the different stages)
