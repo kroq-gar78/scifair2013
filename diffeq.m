@@ -1,37 +1,36 @@
 vars % set the default variables
-r, m, b
+%r, m, b
 %r
 
 % equation: 18+6.7*sin(2*pi*t/365.24+9.2)
 %tempeq=
 
-function popf=f(pop,t)
-temp=17.8995;
-%temp=18;
-%temp=18;
-vars % set the default variables
-%{
-popf(1)=b*r(6)*pop(6)-(m(1)+r(1))*pop(1);
-popf(2)=r(1)*pop(1)-(m(2)+r(2))*pop(2);
-popf(3)=r(2)*pop(2)-(m(3)+r(3))*pop(3);
-popf(4)=r(3)*pop(3)-(m(4)+r(4))*pop(4);
-popf(5)=r(4)*pop(4)-(m(5)+r(5))*pop(5);
-popf(6)=r(5)*pop(5)-(m(6))*pop(6);
-%}
-popf(1)=b*r(4)*pop(4)-(m(1)+r(1))*pop(1);
-popf(2)=r(1)*pop(1)-(m(2)+r(2))*pop(2);
-popf(3)=r(2)*pop(2)-(m(3)+r(3))*pop(3);
-popf(4)=r(3)*pop(3)-(m(4))*pop(4);
-end
-
 t_start=0;
 t_end=200;
-t_step=1/2;
+t_step=1;
 t=linspace(t_start,t_end,(t_end-t_start)/t_step+1)';
-
 pop=zeros(size(t,1),4);
 pop(1,:)=[E;L;P;Ah];
 for n=1:size(t,1)-1
+	function popf=f(pop,t)
+	temp=17.8995;
+	%temp=18;
+	%temp=18;
+	vars % set the default variables
+	%{
+	popf(1)=b*r(6)*pop(6)-(m(1)+r(1))*pop(1);
+	popf(2)=r(1)*pop(1)-(m(2)+r(2))*pop(2);
+	popf(3)=r(2)*pop(2)-(m(3)+r(3))*pop(3);
+	popf(4)=r(3)*pop(3)-(m(4)+r(4))*pop(4);
+	popf(5)=r(4)*pop(4)-(m(5)+r(5))*pop(5);
+	popf(6)=r(5)*pop(5)-(m(6))*pop(6);
+	%}
+	popf(1)=b*r(4)*pop(4)-(m(1)+r(1))*pop(1);
+	popf(2)=r(1)*pop(1)-(m(2)+r(2))*pop(2);
+	popf(3)=r(2)*pop(2)-(m(3)+r(3))*pop(3);
+	popf(4)=r(3)*pop(3)-(m(4))*pop(4);
+	end
+	
 	tmp=lsode("f", pop(n,:), [0,t(n+1)-t(n)]);
 	pop(n+1,:)=tmp(2,:);
 end
