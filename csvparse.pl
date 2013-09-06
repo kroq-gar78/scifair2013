@@ -6,7 +6,7 @@ use Text::CSV; # in Debian package "libtext-csv-perl"
 
 my $csv = Text::CSV->new({sep_char => ','});
 my $file = $ARGV[0] or die "Need an input file\n";
-print $file;
+#print $file;
 
 my @out;
 
@@ -18,9 +18,14 @@ while (my $line = <$data> or die "Failed to read $file: $!")
 	chomp $line;
 	 
 	if ($csv->parse($line))
-	{		 
+	{
 		my @fields = $csv->fields();
-
+		
+		if(scalar @fields<2)
+		{
+			next;
+		}
+		
 		for(my $i = 0; $i < scalar @fields; $i++)
 		{
 			$fields[$i] =~ s/^\s*(.*?)\s*$/$1/;
