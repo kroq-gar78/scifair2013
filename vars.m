@@ -44,7 +44,9 @@ b=polyval(oviposit_p,temp)/2; if(b<0); b=0; disp("Oviposition amount less than 0
 %r=[.48 .14 .5 .4];
 %r=[.48 .14 .5 .1];
 r=[polyval(reggs_p,temp) polyval(rlarvae_p,temp) polyval(rpupae_p,temp) .4];
+for n=1:4; if(r(n)<0); r(n)=0; end; end;
 % m={egg,larva,pupa,adult}
 %m=[.688 .44 .52 .41];
 %m=[.9 .6 .52 1/20];
 m=[polyval(meggs_p,temp) polyval(mlarvae_p,temp) polyval(mpupae_p,temp) polyval(madults_p,temp)];
+for n=1:4; if(m(n)>1); m(n)=1; end; end;
