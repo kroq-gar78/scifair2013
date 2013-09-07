@@ -1,4 +1,4 @@
-vars % set the default variables
+%vars % set the default variables
 %r, m, b
 %r
 
@@ -12,6 +12,7 @@ t=linspace(t_start,t_end,(t_end-t_start)/t_step+1)';
 pop=zeros(size(t,1),4);
 pop(1,:)=[E;L;P;Ah];
 for n=1:size(t,1)-1
+	temp=templist(n);
 	function popf=f(pop,t)
 	temp=pop(5);
 	%temp=17.8995;
@@ -48,6 +49,6 @@ xlabel("Time (days)");
 ylabel("Population");
 legend("Eggs","Larvae","Pupae","Adults");
 
-% save plot
+% save plot; this MIGHT be broken, but it could also be because of error-related outputs earlier in the program
 %print(strcat("plots/diffeq.svg"),"-dsvg")
 %print(strcat("plots/diffeq.png"),"-dpng")
