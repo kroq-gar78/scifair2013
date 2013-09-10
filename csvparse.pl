@@ -19,12 +19,15 @@ open(my $of, ">", "$outfile"); # out filehandle
 
 my $linenum = 0;
 my $if; # in file handle
-#my $ext=
-if(((fileparse("$infile",qr/\.[^.]*/))[2]) eq ".gz")
+my $ext=((fileparse("$infile",qr/\.[^.]*/))[2]);
+if($ext eq ".gz") # probably better to do a switch statement here
 {
 	open($if, "gunzip -c $infile |") or die "Can't open pipe to $infile: $!";
 }
-# TODO: add elsif for bzip2 later
+elsif($ext eq ".bz2")
+{
+	open($if, "bunzip2 -c $infile |") or die "Can't open pipe to $infile: $!";
+}
 else
 {
 	open($if, "<:encoding(utf8)", "$infile") or die "Can't open $infile: $!";
