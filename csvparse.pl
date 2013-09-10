@@ -7,26 +7,29 @@ use File::Basename;
 
 my $csv = Text::CSV->new({sep_char => ','});
 #my $out = Text::CSV->new({sep_char => ','});
-my $file = $ARGV[0] or die "Need an input file\n";
-#print $file;
-
+my $infile = $ARGV[0] or die "Need an input file\n";
+my $outfile = $ARGV[1] or ""; # what is the keyword for "null" in perl?
+#print $infile;
+#print ($infile =~ qr/\.[^.]*gz$/);
 my @cols = (3,4,21);
 
 my @out;
 
-open(my $of, ">", "asdf.csv");
+open(my $of, ">", "$outfile"); # out filehandle
 
 my $linenum = 0;
-my $data;
-if(((fileparse("$file",qr/\.[^.]*/))[2]) eq ".gz")
+my $if; # in file handle
+#my $ext=
+if(((fileparse("$infile",qr/\.[^.]*/))[2]) eq ".gz")
 {
-	open($data, "gunzip -c $file |") or die "Can't open pipe to $file: $!";
+	open($if, "gunzip -c $infile |") or die "Can't open pipe to $infile: $!";
 }
+# TODO: add elsif for bzip2 later
 else
 {
-	open($data, "<:encoding(utf8)", "$file") or die "Can't open $file: $!";
+	open($if, "<:encoding(utf8)", "$infile") or die "Can't open $infile: $!";
 }
-while (defined(my $line = <$data>))
+while (defined(my $line = <$if>))
 {
 	$linenum+=1;
 	chomp $line;
@@ -75,7 +78,7 @@ while (defined(my $line = <$data>))
 }
 
 #$csv->eof or $csv->error_diag();
-close $data;
+close $if;
 
 #print "@out\n";
 #$csv->print ($of,$_) for @out;
