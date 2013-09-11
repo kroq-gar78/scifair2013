@@ -9,7 +9,6 @@ use File::Basename;
 my $csv = Text::CSV->new({sep_char => ','});
 #my $out = Text::CSV->new({sep_char => ','});
 my $infile = $ARGV[0] or die "Need an input file\n";
-my $outfile = $ARGV[1] or ""; # what is the keyword for "null" in perl? later, need to make it print to stdout if no outfile is defined
 
 my @cols = (3,4,21);
 my @out;
@@ -24,20 +23,28 @@ switch($ext)
 	else { open($if, "<:encoding(utf8)", "$infile") or die "Can't open $infile: $!"; }
 }
 
+my $outfile = $ARGV[1] or undef; # what is the keyword for "null" in perl?
 my $of; # out filehandle
-$ext=((fileparse("$outfile",qr/\.[^.]*/))[2]);
+$ext=((fileparse("$outfile",qr/\.[^.]*/))[2]) if defined($outfile) or undef;
 switch($ext)
 {
 	case ".gz" { open($of, "|gzip -c > $outfile") or die "Can't open pipe to $outfile: $!"; }
 	case ".bz2" { open($of, "|bzip2 -c > $outfile") or die "Can't open pipe to $outfile: $!"; }
-	else { open($of, ">","test"); }
+	else
+	{
+		if(defined($outfile)) { open($of, ">","$outfile"); }
+		else
+		{
+			$of = *STDOUT;
+		}
+	}
 }
 
 while (defined(my $line = <$if>))
 {
 	$linenum+=1;
 	chomp $line;
-	 
+	
 	if ($csv->parse($line))
 	{
 		my @fields = $csv->fields();
@@ -87,4 +94,4 @@ close $if;
 #print "@out\n";
 #$csv->print ($of,$_) for @out;
 #$csv->print($of,$out);
-close $of or die "$outfile: $!";
+if(defined($outfile)) { close $of or die "$outfile: $!"; }
