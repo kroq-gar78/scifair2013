@@ -1,6 +1,7 @@
 #use 5.010;
 use strict;
 use warnings;
+use Switch;
 
 use Text::CSV; # in Debian package "libtext-csv-perl"
 use File::Basename;
@@ -8,30 +9,30 @@ use File::Basename;
 my $csv = Text::CSV->new({sep_char => ','});
 #my $out = Text::CSV->new({sep_char => ','});
 my $infile = $ARGV[0] or die "Need an input file\n";
-my $outfile = $ARGV[1] or ""; # what is the keyword for "null" in perl?
-#print $infile;
-#print ($infile =~ qr/\.[^.]*gz$/);
+my $outfile = $ARGV[1] or ""; # what is the keyword for "null" in perl? later, need to make it print to stdout if no outfile is defined
+
 my @cols = (3,4,21);
-
 my @out;
-
-open(my $of, ">", "$outfile"); # out filehandle
-
 my $linenum = 0;
+
 my $if; # in file handle
 my $ext=((fileparse("$infile",qr/\.[^.]*/))[2]);
-if($ext eq ".gz") # probably better to do a switch statement here
+switch($ext)
 {
-	open($if, "gunzip -c $infile |") or die "Can't open pipe to $infile: $!";
+	case ".gz" { open($if, "gunzip -c $infile |") or die "Can't open pipe to $infile: $!"; }
+	case ".bz2" { open($if, "bunzip2 -c $infile |") or die "Can't open pipe to $infile: $!"; }
+	else { open($if, "<:encoding(utf8)", "$infile") or die "Can't open $infile: $!"; }
 }
-elsif($ext eq ".bz2")
+
+my $of; # out filehandle
+$ext=((fileparse("$outfile",qr/\.[^.]*/))[2]);
+switch($ext)
 {
-	open($if, "bunzip2 -c $infile |") or die "Can't open pipe to $infile: $!";
+	case ".gz" { open($of, "|gzip -c > $outfile") or die "Can't open pipe to $outfile: $!"; }
+	case ".bz2" { open($of, "|bzip2 -c > $outfile") or die "Can't open pipe to $outfile: $!"; }
+	else { open($of, ">","test"); }
 }
-else
-{
-	open($if, "<:encoding(utf8)", "$infile") or die "Can't open $infile: $!";
-}
+
 while (defined(my $line = <$if>))
 {
 	$linenum+=1;
@@ -86,4 +87,4 @@ close $if;
 #print "@out\n";
 #$csv->print ($of,$_) for @out;
 #$csv->print($of,$out);
-close $of or die "asdf.csv: $!";
+close $of or die "$outfile: $!";
