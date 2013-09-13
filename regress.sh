@@ -13,3 +13,8 @@ for i in eggs larvae pupae; do
 	octave -q --eval "r_regress(\"$i\",$degree)"
 done
 
+echo "m_adults"
+octave -q --eval "m_adults($degree)" # must do the adults stage separately because no death rate: just life expectancy
+
+echo "oviposit_regress"
+octave -q --eval "oviposit_regress($degree)" # must do egg-laying separately because I can't think of a good name for it
