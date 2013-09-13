@@ -1,7 +1,8 @@
 % this gets the mortality regression of the adults (female)
+function m_adults(degree)
 
 % stage = 'pupae'
-phasename = "adults"
+phasename = "adults";
 temp=csvread(strcat("data/m",phasename,".csv"));
 temp(1,:)=[];
 todelete=~any(temp(:,2),2);
@@ -15,7 +16,7 @@ for n=1:size(stage)
 end
 
 x=15:35; % might need to be changed; might not even be necessary
-p=polyfit(temp,stage,2); % usually going to be quadratic; might need to be changed for some cases, but not sure
+p=polyfit(temp,stage,degree); % usually going to be quadratic; might need to be changed for some cases, but not sure
 
 % plot
 scatter(temp,stage);
@@ -25,3 +26,5 @@ plot(x,f);
 
 % save to file
 save("-mat",strcat("fitm_",phasename,".mat"),"p");
+
+end
