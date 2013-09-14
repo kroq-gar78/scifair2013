@@ -23,8 +23,15 @@ scatter(temp,stage);
 hold on;
 f=polyval(p,x);
 plot(x,f);
+title(strcat("Polynomial regression of ",phasename," mortality rate"))
+xlabel("Temperature (Celsius)")
+ylabel("Mortality rate (%)")
 
 % save to file
 save("-mat",strcat("fitm_",phasename,".mat"),"p");
+
+% save plot to both SVG and PNG
+print(strcat("plots/fitm_",phasename,".svg"),"-dsvg")
+print(strcat("plots/fitm_",phasename,".png"),"-dpng")
 
 end
