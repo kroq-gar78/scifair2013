@@ -23,7 +23,7 @@ scatter(temp,stage);
 hold on;
 f=polyval(p,x);
 plot(x,f);
-title(strcat("Polynomial regression of ",phasename," growth rate rate"))
+title(strcat("Polynomial regression of ",phasename," growth rate"))
 xlabel("Temperature (Celsius)")
 ylabel("Growth per day")
 
