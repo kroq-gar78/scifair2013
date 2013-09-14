@@ -1,9 +1,10 @@
 #!/bin/bash
 
-degree=${1:-2}
+degree=${1:-2} # default degree is 2
 echo "degree=$degree"
 
 # automagically do all of the regressions (at least for the different stages)
+# this might run a bit faster if the loop builds a command string for Octave and then only runs Octave once
 for i in eggs larvae pupae; do
 	#sed -i -r "s/^phasename \= \"[a-zA-Z]+\"$/phasename \= \"$i\"/g" m_regress.m
 	echo "m_$i"
