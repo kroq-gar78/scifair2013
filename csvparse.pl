@@ -10,6 +10,7 @@ my $csv = Text::CSV->new({sep_char => ','});
 #my $out = Text::CSV->new({sep_char => ','});
 my $infile = $ARGV[0] or die "Need an input file\n";
 
+# hard-coded columns for now, but I need to find a robust arguments system to take care of this and other parameters
 my @cols = (3,4,21);
 my @out;
 my $linenum = 0;
@@ -20,7 +21,14 @@ switch($ext)
 {
 	case ".gz" { open($if, "gunzip -c $infile |") or die "Can't open pipe to $infile: $!"; }
 	case ".bz2" { open($if, "bunzip2 -c $infile |") or die "Can't open pipe to $infile: $!"; }
-	else { open($if, "<:encoding(utf8)", "$infile") or die "Can't open $infile: $!"; }
+	else
+	{
+		if(defined($infile)&&($infile ne "-")) { open($if, "<:encoding(utf8)", "$infile") or die "Can't open $infile: $!"; }
+		else
+		{
+			$if = *STDIN;
+		}
+	}
 }
 
 my $outfile = $ARGV[1] or undef; # what is the keyword for "null" in perl?
@@ -32,7 +40,7 @@ switch($ext)
 	case ".bz2" { open($of, "|bzip2 -c > $outfile") or die "Can't open pipe to $outfile: $!"; }
 	else
 	{
-		if(defined($outfile)) { open($of, ">","$outfile"); }
+		if(defined($outfile)&&($outfile ne "-")) { open($of, ">","$outfile") or die "Can't open $outfile: $!"; }
 		else
 		{
 			$of = *STDOUT;
