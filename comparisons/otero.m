@@ -12,7 +12,7 @@ end
 
 # egg hatching
 %t=temp;
-otero_eggs=zeros(size(templist,2))';
+otero_eggs=zeros(1,size(templist,2))';
 for i=1:size(templist,2)
 	otero_eggs(i)=f_otero(templist(i),0.24,10798,100000,14184);
 end
@@ -21,7 +21,7 @@ end
 plot(templist,otero_eggs)
 
 # larval development
-otero_larvae=zeros(size(templist,2))';
+otero_larvae=zeros(1,size(templist,2))';
 for i=1:size(templist,2)
 	otero_larvae(i)=f_otero(templist(i),0.2088,26018,55990,304.6);
 end
