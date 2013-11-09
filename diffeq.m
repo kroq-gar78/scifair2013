@@ -63,10 +63,8 @@ function popf=f(pop,t)
 	popf(4)=r(3)*pop(3)-(m(4))*pop(4);
 end
 
-pop = lsode("f", [pop(1,:)], t);
+[pop,istate,msg] = lsode("f", [pop(1,:)], t);
 %[t,pop] = rk4('f',[0,50],[E;L;P;Ah;Ar;Ao]);
-
-[tmp,istate,msg]=lsode("f", pop(n,:), [0,t(n+1)-t(n)]);
 if(istate!=2)
 	disp(msg)
 end
