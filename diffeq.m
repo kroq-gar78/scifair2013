@@ -60,7 +60,7 @@ function popf=f(pop,t)
 	popf(1)=b*r(4)*pop(4)-(m(1)+r(1))*pop(1);
 	popf(2)=r(1)*pop(1)-(m(2)+r(2))*pop(2);
 	popf(3)=r(2)*pop(2)-(m(3)+r(3))*pop(3);
-	popf(4)=r(3)*pop(3)-(m(4))*pop(4);
+	popf(4)=r(3)*pop(3)/2-(m(4))*pop(4);
 end
 
 [pop,istate,msg] = lsode("f", [pop(1,:)], t);
