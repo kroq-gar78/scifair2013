@@ -6,8 +6,8 @@
 %tempeq=
 
 t_start=0; # days
-t_end=100; # days
-t_step=1; # days
+t_end=500; # days
+t_step=0.02; # days
 t=linspace(t_start,t_end,(t_end-t_start)/t_step+1)';
 
 
