@@ -5,9 +5,8 @@
 E = 1000;
 L = 100;
 P = 100;
-Ah = 1000;
-Ar = 100;
-Ao = 100;
+A1 = 100;
+A2 = 100;
 
 % const
 %r=new int[6] % advancement rate (e.g. egg -> larva)
@@ -41,10 +40,11 @@ b=polyval(oviposit_p,temp); if(b<0); b=0; disp("Oviposition amount less than 0")
 % r={egg,larva,pupa,ovipositRate}
 %r=[.48 .14 .5 .4];
 %r=[.48 .14 .5 .1];
-r=[polyval(reggs_p,temp) polyval(rlarvae_p,temp) polyval(rpupae_p,temp) .15];
+% r={egg,larva,pupa,ovr1,ovr2}
+r=[polyval(reggs_p,temp) polyval(rlarvae_p,temp) polyval(rpupae_p,temp) .101 .174];
 for n=1:4; if(r(n)<0); r(n)=0; end; end;
 % m={egg,larva,pupa,adult}
 %m=[.688 .44 .52 .41];
 %m=[.9 .6 .52 1/20];
 m=[polyval(meggs_p,temp) polyval(mlarvae_p,temp) polyval(mpupae_p,temp) polyval(madults_p,temp)];
-for n=1:4; if(m(n)>1); m(n)=1; end; end;
+for n=1:4; if(m(n)>0.99); m(n)=0.99; end; end;
