@@ -12,8 +12,8 @@ t=linspace(t_start,t_end,(t_end-t_start)/t_step+1)';
 
 
 
-pop=zeros(size(t,1),5);
-pop(1,:)=[E;L;P;A1;A2];
+pop=zeros(size(t,1),4);
+pop(1,:)=[E;L;P;A1];
 #{
 global templist=tempfit(24.27056,2.8,18.30016,t)
 for n=1:size(t,1)-1
@@ -53,23 +53,23 @@ function temp=tempfit(a,b,c,t)
 end
 
 function popf=f(pop,t)
-	temp=tempfit(24.27056,2.8,18.30016,t);
-	#temp=30;
+	%temp=tempfit(18.0,6.7,9.2,t);
+	temp=33; % 18, 21, 24, 27, 30, 33
 	#temp=temp;
 	vars % set the default variables
-	%{
-	popf(1)=b*r(4)*pop(4)-(m(1)+r(1))*pop(1);
-	popf(2)=r(1)*pop(1)-(m(2)+r(2))*pop(2);
+	
+	popf(1)=b*r(4)*pop(4)-(m(1)+r(1)*(1-0.63))*pop(1);
+	popf(2)=r(1)*pop(1)*(1-0.63)-0.01*pop(2)*pop(2)-(m(2)+r(2))*pop(2);
 	popf(3)=r(2)*pop(2)-(m(3)+r(3))*pop(3);
 	popf(4)=r(3)*pop(3)/2-(m(4))*pop(4);
-	popf(5)=
-	%}
 	
+	%{
 	popf(1)=b*(r(4)*pop(4)+r(5)*pop(5))-(m(1)+r(1)*(1-0.63))*pop(1);
 	popf(2)=r(1)*pop(1)*(1-0.63)-0.01*pop(2)*pop(2)-(m(2)+r(2))*pop(2);
 	popf(3)=r(2)*pop(2)-(m(3)+r(3))*pop(3);
-	popf(4)=r(3)*pop(3)/2*0.83-(m(4)+r(4))*pop(4);
+	popf(4)=r(3)*pop(3)/2-(m(4)+r(4))*pop(4);
 	popf(5)=r(4)*pop(4)-m(4)*pop(5);
+	%}
 end
 
 [pop,istate,msg] = lsode("f", [pop(1,:)], t);
@@ -79,13 +79,15 @@ if(istate!=2)
 end
 
 % plot and annotate
-plot(t,pop)
-%plot(t,pop(:,4)+pop(:,5))
-title("Populations of stages of Aedes aegypti over time");
-xlabel("Time (days)");
-ylabel("Population");
-legend("Eggs","Larvae","Pupae","Adults (1)","Adults (2)");
-%legend("Adults");
+%plot(t,pop)
+plot(t,pop(:,4))
+%plot(t,[pop(:,1:3) pop(:,4)+pop(:,5)])
+%title("Populations of stages of Aedes aegypti over time");
+%xlabel("Time (days)");
+%ylabel("Population");
+%legend("Eggs","Larvae","Pupae","Adults (1)","Adults (2)");
+%legend("Eggs","Larvae","Pupae","Adults");
+legend("Adults");
 
 % save plot; this MIGHT be broken, but it could also be because of error-related outputs earlier in the program
 %print(strcat("plots/diffeq.svg"),"-dsvg")
