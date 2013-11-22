@@ -15,8 +15,15 @@ t=linspace(t_start,t_end,(t_end-t_start)/t_step+1)';
 pop=zeros(size(t,1),4);
 pop(1,:)=[E;L;P;A1];
 
+%{
+global fita = 18.0
+global fitb = 0.7
+global fitc = 9.2
+%}
+
 function temp=tempfit(a,b,c,t)
 	temp=a+b*cos(2*pi*t/365.25+c);
+	%temp=fita+fitb*cos(2*pi*t/365.25+fitc);
 end
 
 %global templist=tempfit(24.27056,2.8,18.30016,t)
@@ -25,8 +32,9 @@ for n=1:size(t,1)-1
 	%temp=17.8995;
 	%temp=18;
 	function popf=f(pop,t)
-		%temp=tempfit(18.0,6.7,9.2,t);
-		temp=33; % 18, 21, 24, 27, 30, 33
+		temp=tempfit(18.0,6.7,9.2,t);
+		%temp=tempfit(fita,fitb,fitc);
+		%temp=33; % 18, 21, 24, 27, 30, 33
 		#temp=temp;
 		vars % set the default variables
 		
