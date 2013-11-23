@@ -5,15 +5,15 @@
 % equation: 18+6.7*sin(2*pi*t/365.24+9.2)
 %tempeq=
 
-%t_start=0; # days
-t_start=templist(1,1);
-t_end=templist(size(templist(:,1),1));
-%t_end=4017; # days
+t_start=0; # days
+%t_start=templist(1,1);
+%t_end=templist(size(templist(:,1),1));
+t_end=1200; # days
 t_step=1; # days
 tlist=linspace(t_start,t_end,(t_end-t_start)/t_step+1)';
 
 %t=templist(1:t_end/t_step,1);
-tlist=templist(1:size(templist(:,1),1)-1,1);
+%tlist=templist(1:size(templist(:,1),1)-1,1);
 %t=linspace(templist(1,1),templist(size(templist(:,1),1),1),1);
 
 pop=zeros(size(tlist,1),4);
@@ -60,7 +60,7 @@ function temp=tempfit(a,b,c,t)
 	%temp=fita+fitb*cos(2*pi*t/365.25+fitc);
 end
 
-temps=tempfit(21.2755144118492,18.7014981438,9.2866007993,t);
+temps=tempfit(21.2755144118492,18.7014981438,9.2866007993,tlist);
 
 %{
 %global templist=tempfit(24.27056,2.8,18.30016,t)
@@ -89,8 +89,8 @@ if(istate!=2)
 end
 
 % plot and annotate
-%plot(t,pop)
-plot(t,pop(:,4))
+%plot(tlist,pop)
+plot(tlist,pop(:,4))
 %plot(t,[pop(:,1:3) pop(:,4)+pop(:,5)])
 %title("Populations of stages of Aedes aegypti over time");
 %xlabel("Time (days)");
