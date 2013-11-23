@@ -5,18 +5,19 @@
 % equation: 18+6.7*sin(2*pi*t/365.24+9.2)
 %tempeq=
 
-t_start=0; # days
-%t_start=templist(1,1);
-%t_end=templist(size(templist(:,1),1));
-t_end=1200; # days
-t_step=1; # days
-tlist=linspace(t_start,t_end,(t_end-t_start)/t_step+1)';
+%t_start=0; # days
+t_start=templist(1,1);
+t_end=templist(size(templist(:,1),1));
+%t_end=4200; # days
+t_step=0.5; # days
+teven=linspace(t_start,t_end,(t_end-t_start)/t_step+1)'; % evenly spaced time intervals
 
 %t=templist(1:t_end/t_step,1);
-%tlist=templist(1:size(templist(:,1),1)-1,1);
+tlist=templist(1:size(templist(:,1),1),1);
+%tlist=teven;
 %t=linspace(templist(1,1),templist(size(templist(:,1),1),1),1);
 
-pop=zeros(size(tlist,1),4);
+pop=zeros(size(teven,1),4);
 pop(1,:)=[E;L;P;A1];
 
 %{
@@ -25,12 +26,18 @@ global fitb = 0.7
 global fitc = 9.2
 %}
 
+function temp=tempfit(a,b,c,t)
+	temp=a+b*cos(2*pi*t/365.25+c);
+	%temp=fita+fitb*cos(2*pi*t/365.25+fitc);
+end
+
 function popf=f(pop,t,templist)
 	%temp=tempfit(18.0,6.7,9.2,t);
 	%temp=tempfit(fita,fitb,fitc);
 	%temp=33; % 18, 21, 24, 27, 30, 33
 	#temp=temp;
 	%poss=find(ismember(t,templist(:,1)))
+	%{
 	poss=size(templist(:,1),1);
 	
 	if(templist(end,1)>t)
@@ -39,6 +46,10 @@ function popf=f(pop,t,templist)
 	
 	%[t poss(1)]
 	temp=templist(poss(1),2);
+	%}
+	
+	temp=interp1(templist(:,1),templist(:,2),t,"spline");
+	
 	vars % set the default variables
 	
 	popf(1)=b*r(4)*pop(4)-(m(1)+r(1)*(1-0.63))*pop(1);
@@ -55,12 +66,9 @@ function popf=f(pop,t,templist)
 	%}
 end
 
-function temp=tempfit(a,b,c,t)
-	temp=a+b*cos(2*pi*t/365.25+c);
-	%temp=fita+fitb*cos(2*pi*t/365.25+fitc);
-end
-
-temps=tempfit(21.2755144118492,18.7014981438,9.2866007993,tlist);
+%temps=tempfit(21.2755144118492,18.7014981438,9.2866007993,tlist);
+temps=templist(:,2);
+%temps=interp1(tlist,origtemps,teven,"spline");
 
 %{
 %global templist=tempfit(24.27056,2.8,18.30016,t)
@@ -83,14 +91,15 @@ end
 %}
 
 fd = @(pop,t)f(pop,t,[tlist temps]);
-[pop,istate,msg]=lsode(fd,pop(1,:),tlist);
+%fd = @(pop,t)f(pop,t,[teven temps]);
+[pop,istate,msg]=lsode(fd,pop(1,:),teven);
 if(istate!=2)
 	disp(msg)
 end
 
 % plot and annotate
 %plot(tlist,pop)
-plot(tlist,pop(:,4))
+plot(teven,pop(:,4))
 %plot(t,[pop(:,1:3) pop(:,4)+pop(:,5)])
 %title("Populations of stages of Aedes aegypti over time");
 %xlabel("Time (days)");
