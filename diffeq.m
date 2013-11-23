@@ -5,16 +5,18 @@
 % equation: 18+6.7*sin(2*pi*t/365.24+9.2)
 %tempeq=
 
-%t_start=0; # days
-t_start=templist(1,1);
-t_end=templist(size(templist(:,1),1));
-%t_end=4200; # days
+lsode_options("minimum step size",1.E-4) % set time step to 0.0001 so that the time step doesn't become too small (also for efficiency); 0.0001 days ~= 6 seconds, so shouldn't affect the result
+
+t_start=0; # days
+%t_start=templist(1,1);
+%t_end=templist(size(templist(:,1),1));
+t_end=2000; # days
 t_step=0.5; # days
 teven=linspace(t_start,t_end,(t_end-t_start)/t_step+1)'; % evenly spaced time intervals
 
 %t=templist(1:t_end/t_step,1);
-tlist=templist(1:size(templist(:,1),1),1);
-%tlist=teven;
+%tlist=templist(1:size(templist(:,1),1),1);
+tlist=teven;
 %t=linspace(templist(1,1),templist(size(templist(:,1),1),1),1);
 
 pop=zeros(size(teven,1),4);
@@ -38,6 +40,9 @@ function popf=f(pop,t,templist)
 	#temp=temp;
 	%poss=find(ismember(t,templist(:,1)))
 	%{
+	format long;
+	display(t)
+	
 	poss=size(templist(:,1),1);
 	
 	if(templist(end,1)>t)
@@ -47,7 +52,6 @@ function popf=f(pop,t,templist)
 	%[t poss(1)]
 	temp=templist(poss(1),2);
 	%}
-	
 	temp=interp1(templist(:,1),templist(:,2),t,"spline");
 	
 	vars % set the default variables
@@ -66,9 +70,8 @@ function popf=f(pop,t,templist)
 	%}
 end
 
-%temps=tempfit(21.2755144118492,18.7014981438,9.2866007993,tlist);
-temps=templist(:,2);
-%temps=interp1(tlist,origtemps,teven,"spline");
+temps=tempfit(21.2755144118492,18.7014981438,9.2866007993,tlist);
+%temps=templist(:,2);
 
 %{
 %global templist=tempfit(24.27056,2.8,18.30016,t)
@@ -90,7 +93,7 @@ for n=1:size(tlist,1)-1
 end
 %}
 
-fd = @(pop,t)f(pop,t,[tlist temps]);
+fd = @(pop,t)f(pop,t,[tlist temps;(tlist(end)+lsode_options("minimum step size")),temps(end)]); % add extra line to the array so that the interpolation doesn't try to evaluate out of bounds
 %fd = @(pop,t)f(pop,t,[teven temps]);
 [pop,istate,msg]=lsode(fd,pop(1,:),teven);
 if(istate!=2)
