@@ -35,7 +35,9 @@ madults_p=csvread("fitm_adults.csv"); # weights for death rate of adults
 %b=16; % number of female eggs laid per oviposition
 load fit_oviposit.mat;
 oviposit_p=csvread("fitr_adults.csv");
-b=polyval(oviposit_p,temp); if(b<0); b=0; disp("Oviposition amount less than 0"); end
+b=polyval(oviposit_p,temp); if(b<0); b=0;
+%disp("Oviposition amount less than 0")
+end
 
 % r={egg,larva,pupa,ovipositRate}
 %r=[.48 .14 .5 .4];
@@ -48,3 +50,6 @@ for n=1:4; if(r(n)<0); r(n)=0; end; end;
 %m=[.9 .6 .52 1/20];
 m=[polyval(meggs_p,temp) polyval(mlarvae_p,temp) polyval(mpupae_p,temp) polyval(madults_p,temp)];
 for n=1:4; if(m(n)>0.99); m(n)=0.99; end; end;
+
+gamma=0.63; % egg hatching inhibition by larvae 
+alpha=0.01; % density-dependent larvae mortality
