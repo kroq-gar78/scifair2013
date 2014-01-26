@@ -2,7 +2,7 @@
 
 %temp=25;
 
-E = 1000;
+E = 100;
 L = 100;
 P = 100;
 A1 = 100;
@@ -51,5 +51,5 @@ for n=1:4; if(r(n)<0); r(n)=0; end; end;
 m=[polyval(meggs_p,temp) polyval(mlarvae_p,temp) polyval(mpupae_p,temp) polyval(madults_p,temp)];
 for n=1:4; if(m(n)>0.99); m(n)=0.99; end; end;
 
-gamma=0.63; % egg hatching inhibition by larvae 
+gamma=0.00; % egg hatching inhibition by larvae 
 alpha=0.01; % density-dependent larvae mortality
