@@ -15,8 +15,8 @@ end
 t_start=0; # days
 %t_start=templist(1,1);
 %t_end=templist(size(templist(:,1),1));
-t_end=2000; # days
-t_step=0.5; # days
+t_end=1200; # days
+t_step=1; # days
 teven=linspace(t_start,t_end,(t_end-t_start)/t_step+1)'; % evenly spaced time intervals
 
 %tlist=templist(1:t_end/t_step,1);
@@ -24,6 +24,7 @@ teven=linspace(t_start,t_end,(t_end-t_start)/t_step+1)'; % evenly spaced time in
 tlist=teven;
 
 %temps=tempfit(26.89,3.82,10.1188,tlist); % double hump
+%temps=tempfit(18,6.7,9.2,tlist); % sinusoidal for Buenos Aires (from Otero, et al. 2006)
 %temps=templist(:,2);
 temps=zeros(size(teven,1),1)+27; % constant temperature of 27
 
@@ -56,14 +57,14 @@ function popf=f(pop,t,templist)
 	temp=templist(poss(1),2);
 	%}
 	temp=interp1(templist(:,1),templist(:,2),t,"spline");
-	%[t temp pop']
 	
 	vars % set the default variables
 	
 	popf(1)=b*r(4)*pop(4)-(m(1)+r(1)*(1-gamma))*pop(1);
-	popf(2)=r(1)*pop(1)*(1-gamma)-alpha*pop(2)*pop(2)-(m(2)+r(2))*pop(2);
+	popf(2)=r(1)*pop(1)*(1-gamma)-alpha*(pop(2)^2)-(m(2)+r(2))*pop(2);
 	popf(3)=r(2)*pop(2)-(m(3)+r(3))*pop(3);
 	popf(4)=r(3)*pop(3)/2-(m(4))*pop(4);
+	%[t temp popf]
 	
 	%{
 	popf(1)=b*(r(4)*pop(4)+r(5)*pop(5))-(m(1)+r(1)*(1-0.63))*pop(1);
