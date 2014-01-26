@@ -8,7 +8,7 @@ use File::Basename;
 
 my $csv = Text::CSV->new({sep_char => ','});
 #my $out = Text::CSV->new({sep_char => ','});
-my $infile = $ARGV[0] or die "Need an input file. Use \"-\" for stdin\n";
+my $infile = $ARGV[0] or die "Error: need an input file. Use \"-\" for stdin\n";
 
 # hard-coded columns for now, but I need to find a robust arguments system to take care of this and other parameters
 my @cols = (3,4,21);
