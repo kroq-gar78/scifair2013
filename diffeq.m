@@ -37,8 +37,9 @@ function popf=f(pop,t,templist)
 	
 	vars % calculate variables from temperature
 	
+	alphas=[0 0.01; templist(end,1)+1 0.01];
 	%alphas=[0 0.01;220 0.01;235 0.02]
-	alphas=[0 0.01; 200 0.01; 220 0.015; 230 0.02; 235 0.02; 400 0.015; 600 0.01; 1200+1 0.01];
+	%alphas=[0 0.01; 200 0.01; 220 0.015; 230 0.02; 235 0.02; 400 0.015; 600 0.01; 1200+1 0.01];
 	alpha=interp1(alphas(:,1),alphas(:,2),t,"linear");
 	
 	popf(1)=b*r(4)*pop(4)-(m(1)+r(1)*(1-gamma))*pop(1);
