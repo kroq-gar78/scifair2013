@@ -45,8 +45,19 @@ function popf=f(pop,t,templist)
 	popf(2)=r(1)*pop(1)*(1-gamma)-alpha*(pop(2)^2)-(m(2)+r(2))*pop(2);
 	popf(3)=r(2)*pop(2)-(m(3)+r(3))*pop(3);
 	popf(4)=r(3)*pop(3)/2-(m(4))*pop(4);
-	%[t temp popf]
+	%tmpmatrix=[t temp pop(1) pop(2) pop(3) pop(4)];
+	%tmpmatrix=[t temp popf(1) popf(2) popf(3) popf(4)];
+	tmpmatrix=[t pop(2) popf(2) (r(1)*pop(1)-(m(2)+r(2))*pop(2)) (r(1)*pop(1)-(m(2)+r(2))*pop(2))/0.009*0.01 alpha];
+
+	%tmpmatrix=[t popf(1) popf(2) popf(3) popf(4) pop(1) pop(2) pop(3) pop(4)];
+	%tmpmatrix=[t popf(1) (m(2)+r(2))*pop(2) popf(3) popf(4) pop(1) pop(2) pop(3) pop(4)];
+	%tmpmatrix=[t popf(1) popf(2) popf(3) popf(4) (b*r(4)*pop(4)-(m(1)+r(1)*(1-gamma))*pop(1)) (r(1)*pop(1)*(1-gamma)-alpha*(pop(2)^2)-(m(2)+r(2))*pop(2)) (r(2)*pop(2)-(m(3)+r(3))*pop(3)) (r(3)*pop(3)/2-(m(4))*pop(4)) pop(1) pop(2) pop(3) pop(4)];
+	%tmpmatrix=[t temp popf(1) popf(2) popf(3) popf(4) (r(1)*pop(1)*(1-gamma)-(m(2)+r(2))*pop(2)) pop(1) pop(2) pop(3) pop(4)];
 	
+	tmp_2=mat2str(tmpmatrix,4);
+	tmpmatrix=eval(tmp_2);
+	%output_precision(3);
+	%csvwrite("step_out_2014-02-27_aChange.csv",tmpmatrix,"-append")
 	%{
 	popf(1)=b*(r(4)*pop(4)+r(5)*pop(5))-(m(1)+r(1)*(1-gamma))*pop(1);
 	popf(2)=r(1)*pop(1)*(1-gamma)-0.01*pop(2)*pop(2)-(m(2)+r(2))*pop(2);
