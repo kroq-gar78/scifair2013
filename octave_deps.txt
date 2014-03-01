@@ -1,0 +1,4 @@
+This list contains the list of external Octave dependencies used to run scripts in this repository:
+
+io (Debian: "octave-io")
+odepkg (Debian: "octave-odepkg")
